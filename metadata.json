@@ -1,0 +1,8 @@
+{
+  "name": "IASI Rental Store Chile",
+  "description": "Premium industrial platform for electrical solutions, transformers, and substations in Chile. Focused on B2B mining, construction, and power sectors.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
