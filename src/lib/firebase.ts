@@ -12,8 +12,16 @@ export async function loginWithGoogle() {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     return result.user;
-  } catch (error) {
-    console.error("Login Error:", error);
+  } catch (error: any) {
+    console.error("Login Error Details:", error);
+    if (error.code === 'auth/unauthorized-domain') {
+      const currentDomain = window.location.hostname;
+      alert(`ERROR: Dominio no autorizado.\n\nPor favor, agrega "${currentDomain}" a la lista de dominios autorizados en tu consola de Firebase (Autenticación > Ajustes > Dominios autorizados).`);
+    } else if (error.code === 'auth/popup-blocked') {
+      alert("La ventana emergente fue bloqueada por el navegador. Por favor permite las ventanas emergentes para este sitio.");
+    } else {
+      alert("Error al iniciar sesión: " + (error.message || "Error desconocido"));
+    }
     throw error;
   }
 }

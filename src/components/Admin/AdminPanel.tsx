@@ -33,10 +33,12 @@ const CATEGORIES = [
 export default function AdminPanel() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [items, setItems] = useState<CatalogItem[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [currentItem, setCurrentItem] = useState<Partial<CatalogItem>>({
     name: '',
+    description: '',
     category: 'distribucion',
     tag: 'Stock',
     image: '',
@@ -93,6 +95,7 @@ export default function AdminPanel() {
     try {
       const itemData = {
         name: currentItem.name,
+        description: currentItem.description || '',
         category: currentItem.category,
         tag: currentItem.tag || 'Stock',
         image: currentItem.image,
@@ -106,7 +109,7 @@ export default function AdminPanel() {
       }
 
       setIsEditing(false);
-      setCurrentItem({ name: '', category: 'distribucion', tag: 'Stock', image: '', specs: [''] });
+      setCurrentItem({ name: '', description: '', category: 'distribucion', tag: 'Stock', image: '', specs: [''] });
       await loadItems();
     } catch (err) {
       console.error("Save Error:", err);
@@ -122,6 +125,17 @@ export default function AdminPanel() {
       loadItems();
     }
   }
+
+  const handleLogin = async () => {
+    try {
+      setAuthError(null);
+      await loginWithGoogle();
+    } catch (err: any) {
+      setAuthError(err.code === 'auth/unauthorized-domain' 
+        ? "DOMINIO NO AUTORIZADO" 
+        : "ERROR DE AUTENTICACIÓN");
+    }
+  };
 
   const isAdmin = user?.email === 'chinchuarchibo@gmail.com';
 
@@ -149,12 +163,18 @@ export default function AdminPanel() {
           <h2 className="text-3xl font-display font-black text-white mb-2 tracking-tighter">PANEL DE CONTROL</h2>
           <p className="text-white/40 mb-8 font-medium">Solo personal autorizado para la gestión del catálogo IASI.</p>
           <button 
-            onClick={loginWithGoogle}
+            onClick={handleLogin}
             className="w-full bg-iasi-accent text-iasi-blue py-4 rounded-sm font-black text-xs tracking-widest hover:bg-white transition-all flex items-center justify-center gap-3 shadow-lg shadow-iasi-accent/10"
           >
             <ImageIcon size={18} />
             INGRESAR CON GOOGLE
           </button>
+          
+          {authError && (
+            <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] font-bold uppercase tracking-widest">
+              {authError}: Verifique la consola o contacte soporte.
+            </div>
+          )}
         </motion.div>
       </div>
     );
@@ -206,7 +226,7 @@ export default function AdminPanel() {
           </div>
           <button 
             onClick={() => {
-              setCurrentItem({ name: '', category: 'distribucion', tag: 'Stock', image: '', specs: [''] });
+              setCurrentItem({ name: '', description: '', category: 'distribucion', tag: 'Stock', image: '', specs: [''] });
               setIsEditing(true);
             }}
             className="bg-iasi-accent text-iasi-blue px-6 py-3 rounded-sm font-black text-xs tracking-widest hover:bg-white transition-all flex items-center gap-2 shadow-lg shadow-iasi-accent/20"
@@ -337,6 +357,16 @@ export default function AdminPanel() {
                         />
                       </div>
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-black text-iasi-blue uppercase tracking-widest mb-2">Descripción Corta</label>
+                    <textarea 
+                      value={currentItem.description}
+                      onChange={(e) => setCurrentItem({...currentItem, description: e.target.value})}
+                      className="w-full bg-white border border-iasi-grey/10 p-3 focus:outline-none focus:border-iasi-accent font-medium text-sm text-iasi-blue min-h-[80px]"
+                      placeholder="Ej: Transformador trifásico sumergido en aceite..."
+                    />
                   </div>
 
                   <div>

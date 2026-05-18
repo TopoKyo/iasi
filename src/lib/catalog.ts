@@ -15,6 +15,7 @@ import { db, auth, handleFirestoreError, OperationType } from './firebase';
 export interface CatalogItem {
   id?: string;
   name: string;
+  description?: string;
   category: string;
   tag: string;
   image: string;
@@ -39,6 +40,7 @@ export async function getCatalogItems(): Promise<CatalogItem[]> {
       return {
         id: doc.id,
         name: data.name || 'Equipo sin nombre',
+        description: data.description || '',
         category: data.category || 'distribucion',
         tag: data.tag || 'Disponible',
         image: data.image || 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=2070&auto=format&fit=crop',
@@ -57,6 +59,7 @@ export async function getCatalogItems(): Promise<CatalogItem[]> {
         id: doc.id,
         ...doc.data(),
         name: doc.data().name || 'Equipo sin nombre',
+        description: doc.data().description || '',
         category: doc.data().category || 'distribucion',
         specs: doc.data().specs || []
       })) as CatalogItem[];

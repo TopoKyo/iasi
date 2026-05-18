@@ -40,7 +40,9 @@ export default function Catalog() {
   const filteredProducts = (products || []).filter(p => {
     const matchesCategory = activeCategory === 'todos' || p.category === activeCategory;
     const name = p.name || '';
-    const matchesSearch = name.toLowerCase().includes((search || '').toLowerCase());
+    const desc = p.description || '';
+    const searchTerm = (search || '').toLowerCase();
+    const matchesSearch = name.toLowerCase().includes(searchTerm) || desc.toLowerCase().includes(searchTerm);
     return matchesCategory && matchesSearch;
   });
 
@@ -151,9 +153,15 @@ export default function Catalog() {
                 </div>
 
                 <div className="p-8 flex flex-col flex-grow">
-                  <h3 className="text-xl font-display font-black text-iasi-blue mb-4 leading-tight group-hover:text-iasi-accent transition-colors">
+                  <h3 className="text-xl font-display font-black text-iasi-blue mb-2 leading-tight group-hover:text-iasi-accent transition-colors">
                     {product.name}
                   </h3>
+                  
+                  {product.description && (
+                    <p className="text-xs text-iasi-grey/60 mb-4 line-clamp-2 leading-relaxed">
+                      {product.description}
+                    </p>
+                  )}
                   
                   <div className="space-y-2 mb-8 flex-grow">
                     {product.specs.map((spec, idx) => (
