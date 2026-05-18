@@ -134,8 +134,8 @@ export default function Catalog() {
                   <img 
                     src={product.image} 
                     alt={product.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute top-4 left-4">
                     <span className="bg-iasi-accent text-iasi-blue text-[10px] font-black uppercase px-3 py-1 rounded-full shadow-lg">

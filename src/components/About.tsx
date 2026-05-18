@@ -12,8 +12,8 @@ export default function About() {
               <img 
                 src="https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=2070&auto=format&fit=crop" 
                 alt="IASI Operativo" 
-                className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
+                className="w-full h-full object-cover"
               />
             </div>
             {/* Decorative elements */}

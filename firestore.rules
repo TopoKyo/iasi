@@ -50,6 +50,29 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // Projects Collection
+    match /projects/{projectId} {
+      allow read: if true;
+      allow create: if isAdmin() 
+        && incoming().keys().hasAll(['title', 'description', 'coverImage', 'carouselImages', 'createdAt', 'updatedAt', 'createdBy'])
+        && incoming().title is string && incoming().title.size() <= 200
+        && incoming().description is string && incoming().description.size() <= 2000
+        && incoming().coverImage is string && incoming().coverImage.size() <= 500
+        && incoming().carouselImages is list && incoming().carouselImages.size() <= 20
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time
+        && incoming().createdBy == request.auth.uid;
+      allow update: if isAdmin()
+        && (incoming().title is string && incoming().title.size() <= 200)
+        && (incoming().description is string && incoming().description.size() <= 2000)
+        && (incoming().coverImage is string && incoming().coverImage.size() <= 500)
+        && (incoming().carouselImages is list && incoming().carouselImages.size() <= 20)
+        && incoming().updatedAt == request.time
+        && incoming().createdAt == existing().createdAt
+        && incoming().createdBy == existing().createdBy;
+      allow delete: if isAdmin();
+    }
+
     // Admins Collection
     match /admins/{adminId} {
       allow read: if isVerified() && (request.auth.uid == adminId || isAdmin());

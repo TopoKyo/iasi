@@ -46,6 +46,7 @@ export default function Clients() {
               <img 
                 src={client.logo} 
                 alt={client.name} 
+                referrerPolicy="no-referrer"
                 className="max-w-full max-h-full object-contain filter drop-shadow-sm"
               />
             </div>

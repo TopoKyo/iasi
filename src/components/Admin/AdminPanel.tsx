@@ -20,6 +20,13 @@ import {
   deleteCatalogItem, 
   CatalogItem 
 } from '../../lib/catalog';
+import {
+  getProjects,
+  createProject,
+  updateProject,
+  deleteProject,
+  Project
+} from '../../lib/projects';
 import { motion, AnimatePresence } from 'motion/react';
 
 const CATEGORIES = [
@@ -33,7 +40,10 @@ const CATEGORIES = [
 export default function AdminPanel() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'catalog' | 'projects'>('catalog');
   const [authError, setAuthError] = useState<string | null>(null);
+  
+  // Catalog State
   const [items, setItems] = useState<CatalogItem[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [currentItem, setCurrentItem] = useState<Partial<CatalogItem>>({
@@ -43,6 +53,16 @@ export default function AdminPanel() {
     tag: 'Stock',
     image: '',
     specs: ['']
+  });
+
+  // Projects State
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [isProjectEditing, setIsProjectEditing] = useState(false);
+  const [currentProject, setCurrentProject] = useState<Partial<Project>>({
+    title: '',
+    description: '',
+    coverImage: '',
+    carouselImages: ['']
   });
 
   useEffect(() => {
@@ -58,7 +78,7 @@ export default function AdminPanel() {
       clearTimeout(timeout);
       setUser(u);
       if (u) {
-        loadItems();
+        loadData();
       } else {
         setLoading(false);
       }
@@ -73,15 +93,37 @@ export default function AdminPanel() {
     };
   }, []);
 
-  const loadItems = async () => {
+  const loadData = async () => {
     setLoading(true);
+    try {
+      const [catalogData, projectsData] = await Promise.all([
+        getCatalogItems(),
+        getProjects()
+      ]);
+      setItems(catalogData);
+      setProjects(projectsData);
+    } catch (err) {
+      console.error("Error loading data:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadItems = async () => {
     try {
       const data = await getCatalogItems();
       setItems(data);
     } catch (err) {
       console.error("Error loading products:", err);
-    } finally {
-      setLoading(false);
+    }
+  };
+
+  const loadProjectsData = async () => {
+    try {
+      const data = await getProjects();
+      setProjects(data);
+    } catch (err) {
+      console.error("Error loading projects:", err);
     }
   };
 
@@ -123,6 +165,52 @@ export default function AdminPanel() {
     if (confirm("¿Está seguro de eliminar este equipo?")) {
       await deleteCatalogItem(id);
       loadItems();
+    }
+  }
+
+  async function handleProjectSave() {
+    if (!currentProject.title || !currentProject.coverImage) {
+      alert("Por favor complete título e imagen de portada");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const projectData = {
+        title: currentProject.title!,
+        description: currentProject.description || '',
+        coverImage: currentProject.coverImage!,
+        carouselImages: (currentProject.carouselImages || []).filter(img => img.trim() !== '')
+      };
+
+      if (currentProject.id) {
+        await updateProject(currentProject.id, projectData);
+      } else {
+        await createProject(projectData);
+      }
+
+      setIsProjectEditing(false);
+      setCurrentProject({ title: '', description: '', coverImage: '', carouselImages: [''] });
+      await loadProjectsData();
+    } catch (err) {
+      console.error("Project Save Error:", err);
+      alert("No se pudo guardar el proyecto.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleProjectDelete(id: string) {
+    if (confirm("¿Está seguro de eliminar este proyecto?")) {
+      setLoading(true);
+      try {
+        await deleteProject(id);
+        await loadProjectsData();
+      } catch (err) {
+        console.error("Delete Error:", err);
+      } finally {
+        setLoading(false);
+      }
     }
   }
 
@@ -219,60 +307,145 @@ export default function AdminPanel() {
       </header>
 
       <main className="container mx-auto py-12 px-6 flex-grow">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
-          <div>
-            <h2 className="text-3xl font-display font-black text-white">GESTIONAR EQUIPOS</h2>
-            <p className="text-white/40 mt-1 font-medium">Total: {items.length} equipos registrados</p>
-          </div>
+        {/* Tabs */}
+        <div className="flex gap-4 mb-12 border-b border-white/5">
           <button 
-            onClick={() => {
-              setCurrentItem({ name: '', description: '', category: 'distribucion', tag: 'Stock', image: '', specs: [''] });
-              setIsEditing(true);
-            }}
-            className="bg-iasi-accent text-iasi-blue px-6 py-3 rounded-sm font-black text-xs tracking-widest hover:bg-white transition-all flex items-center gap-2 shadow-lg shadow-iasi-accent/20"
+            onClick={() => setActiveTab('catalog')}
+            className={`pb-4 px-4 font-black uppercase tracking-widest text-xs transition-all border-b-2 ${activeTab === 'catalog' ? 'border-iasi-accent text-iasi-accent' : 'border-transparent text-white/40 hover:text-white'}`}
           >
-            <Plus size={18} />
-            AÑADIR EQUIPO
+            Equipos del Catálogo
+          </button>
+          <button 
+            onClick={() => setActiveTab('projects')}
+            className={`pb-4 px-4 font-black uppercase tracking-widest text-xs transition-all border-b-2 ${activeTab === 'projects' ? 'border-iasi-accent text-iasi-accent' : 'border-transparent text-white/40 hover:text-white'}`}
+          >
+            Proyectos Realizados
           </button>
         </div>
 
-        {/* List */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {items.map((item) => (
-            <div key={item.id} className="bg-white/5 border border-white/5 p-6 rounded-sm hover:border-white/20 transition-all group">
-              <div className="aspect-video bg-white/5 mb-6 overflow-hidden relative">
-                <img src={item.image} alt={item.name} className="w-full h-full object-cover grayscale transition-all group-hover:grayscale-0" />
-                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button 
-                    onClick={() => {
-                      setCurrentItem(item);
-                      setIsEditing(true);
-                    }}
-                    className="bg-white p-2 text-iasi-blue hover:bg-iasi-accent transition-colors shadow-lg"
-                  >
-                    <Edit size={16} />
-                  </button>
-                  <button 
-                    onClick={() => handleDelete(item.id!)}
-                    className="bg-red-500 p-2 text-white hover:bg-red-600 transition-colors shadow-lg"
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
+        {activeTab === 'catalog' ? (
+          <>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+              <div>
+                <h2 className="text-3xl font-display font-black text-white uppercase tracking-tight">GESTIONAR EQUIPOS</h2>
+                <p className="text-white/40 mt-1 font-medium italic">Inventario de transformadores y equipos técnicos</p>
               </div>
-              <p className="text-[10px] font-black uppercase text-iasi-accent tracking-[0.2em] mb-1">{item.tag}</p>
-              <h3 className="text-lg font-display font-black text-white mb-2 truncate">{item.name}</h3>
-              <p className="text-xs font-bold text-white/30 uppercase mb-4 tracking-widest">{CATEGORIES.find(c => c.id === item.category)?.name}</p>
-              <div className="flex flex-wrap gap-2">
-                {item.specs.slice(0, 2).map((s, i) => (
-                  <span key={i} className="text-[10px] bg-white/5 px-2 py-1 text-white/60 font-bold border border-white/5">
-                    {s}
-                  </span>
-                ))}
-              </div>
+              <button 
+                onClick={() => {
+                  setCurrentItem({ name: '', description: '', category: 'distribucion', tag: 'Stock', image: '', specs: [''] });
+                  setIsEditing(true);
+                }}
+                className="bg-iasi-accent text-iasi-blue px-6 py-3 rounded-sm font-black text-xs tracking-widest hover:bg-white transition-all flex items-center gap-2 shadow-lg shadow-iasi-accent/20"
+              >
+                <Plus size={18} />
+                AÑADIR EQUIPO
+              </button>
             </div>
-          ))}
-        </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {items.map((item) => (
+                <div key={item.id} className="bg-white/5 border border-white/5 p-6 rounded-sm hover:border-white/20 transition-all group">
+                  <div className="aspect-video bg-white/5 mb-6 overflow-hidden relative border border-white/5">
+                    <img 
+                      src={item.image} 
+                      alt={item.name} 
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover grayscale transition-all group-hover:grayscale-0" 
+                    />
+                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button 
+                        onClick={() => {
+                          setCurrentItem(item);
+                          setIsEditing(true);
+                        }}
+                        className="bg-white p-2 text-iasi-blue hover:bg-iasi-accent transition-colors shadow-lg"
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(item.id!)}
+                        className="bg-red-500 p-2 text-white hover:bg-red-600 transition-colors shadow-lg"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-[10px] font-black uppercase text-iasi-accent tracking-[0.2em] mb-1">{item.tag}</p>
+                  <h3 className="text-lg font-display font-black text-white mb-2 truncate">{item.name}</h3>
+                  <p className="text-xs font-bold text-white/30 uppercase mb-4 tracking-widest">{CATEGORIES.find(c => c.id === item.category)?.name}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {item.specs.slice(0, 2).map((s, i) => (
+                      <span key={i} className="text-[10px] bg-white/5 px-2 py-1 text-white/60 font-bold border border-white/5 uppercase">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+              <div>
+                <h2 className="text-3xl font-display font-black text-white uppercase tracking-tight">GESTIONAR PROYECTOS</h2>
+                <p className="text-white/40 mt-1 font-medium italic">Historial de obras e instalaciones realizadas</p>
+              </div>
+              <button 
+                onClick={() => {
+                  setCurrentProject({ title: '', description: '', coverImage: '', carouselImages: [''] });
+                  setIsProjectEditing(true);
+                }}
+                className="bg-iasi-accent text-iasi-blue px-6 py-3 rounded-sm font-black text-xs tracking-widest hover:bg-white transition-all flex items-center gap-2 shadow-lg shadow-iasi-accent/20"
+              >
+                <Plus size={18} />
+                NUEVO PROYECTO
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.map((project) => (
+                <div key={project.id} className="bg-white/5 border border-white/5 p-6 rounded-sm hover:border-white/20 transition-all group">
+                  <div className="aspect-video bg-white/5 mb-6 overflow-hidden relative border border-white/5">
+                    <img 
+                      src={project.coverImage} 
+                      alt={project.title} 
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover grayscale transition-all group-hover:grayscale-0" 
+                    />
+                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button 
+                        onClick={() => {
+                          setCurrentProject(project);
+                          setIsProjectEditing(true);
+                        }}
+                        className="bg-white p-2 text-iasi-blue hover:bg-iasi-accent transition-colors shadow-lg"
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button 
+                        onClick={() => handleProjectDelete(project.id!)}
+                        className="bg-red-500 p-2 text-white hover:bg-red-600 transition-colors shadow-lg"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                    <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-iasi-blue/80 px-2 py-1 backdrop-blur-sm">
+                      <ImageIcon size={10} className="text-iasi-accent" />
+                      <span className="text-[9px] font-black text-white uppercase tracking-widest">
+                        {project.carouselImages.length} fotos
+                      </span>
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-display font-black text-white mb-2 truncate uppercase tracking-tight">{project.title}</h3>
+                  <p className="text-xs text-white/40 line-clamp-2 leading-relaxed h-[36px] italic">
+                    {project.description || 'Sin descripción'}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </main>
 
       <footer className="py-12 px-6 border-t border-white/5 text-center">
@@ -423,6 +596,131 @@ export default function AdminPanel() {
                 >
                   <Save size={18} />
                   GUARDAR CAMBIOS
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Project Edit Modal */}
+      <AnimatePresence>
+        {isProjectEditing && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsProjectEditing(false)}
+              className="absolute inset-0 bg-iasi-blue/95 backdrop-blur-md"
+            ></motion.div>
+            
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white w-full max-w-2xl rounded-sm shadow-2xl relative z-10 overflow-hidden flex flex-col max-h-[90vh]"
+            >
+              <div className="bg-iasi-blue p-6 flex justify-between items-center text-white">
+                <h3 className="font-display font-black text-xl uppercase tracking-tighter">
+                  {currentProject.id ? 'Editar Proyecto' : 'Nuevo Proyecto Realizado'}
+                </h3>
+                <button onClick={() => setIsProjectEditing(false)} className="hover:text-iasi-accent transition-colors">
+                  <X />
+                </button>
+              </div>
+              
+              <div className="p-8 overflow-y-auto bg-iasi-white">
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-xs font-black text-iasi-blue uppercase tracking-widest mb-2">Título del Proyecto</label>
+                    <input 
+                      type="text" 
+                      value={currentProject.title}
+                      onChange={(e) => setCurrentProject({...currentProject, title: e.target.value})}
+                      className="w-full bg-white border border-iasi-grey/10 p-3 focus:outline-none focus:border-iasi-accent font-medium text-sm text-iasi-blue"
+                      placeholder="Ej: Instalación Subestación Minera Atacama"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-black text-iasi-blue uppercase tracking-widest mb-2">Imagen de Portada (URL)</label>
+                    <div className="relative">
+                      <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-iasi-grey/30" size={16} />
+                      <input 
+                        type="text" 
+                        value={currentProject.coverImage}
+                        onChange={(e) => setCurrentProject({...currentProject, coverImage: e.target.value})}
+                        className="w-full bg-white border border-iasi-grey/10 p-3 pl-10 focus:outline-none focus:border-iasi-accent font-medium text-sm text-iasi-blue"
+                        placeholder="https://images.unsplash.com/..."
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-black text-iasi-blue uppercase tracking-widest mb-2">Descripción del Proyecto</label>
+                    <textarea 
+                      value={currentProject.description}
+                      onChange={(e) => setCurrentProject({...currentProject, description: e.target.value})}
+                      className="w-full bg-white border border-iasi-grey/10 p-3 focus:outline-none focus:border-iasi-accent font-medium text-sm text-iasi-blue min-h-[120px]"
+                      placeholder="Describa los detalles técnicos, ubicación y alcance del proyecto..."
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="block text-xs font-black text-iasi-blue uppercase tracking-widest">Galería de Fotos (Carousel URLs)</label>
+                      <button 
+                        onClick={() => setCurrentProject({...currentProject, carouselImages: [...(currentProject.carouselImages || []), '']})}
+                        className="text-iasi-accent hover:text-iasi-blue transition-colors"
+                      >
+                        <PlusCircle size={20} />
+                      </button>
+                    </div>
+                    <div className="space-y-3">
+                      {(currentProject.carouselImages || []).map((img, idx) => (
+                        <div key={idx} className="flex gap-2">
+                          <input 
+                            type="text" 
+                            value={img}
+                            onChange={(e) => {
+                              const newImgs = [...(currentProject.carouselImages || [])];
+                              newImgs[idx] = e.target.value;
+                              setCurrentProject({...currentProject, carouselImages: newImgs});
+                            }}
+                            className="flex-grow bg-white border border-iasi-grey/10 p-3 focus:outline-none focus:border-iasi-accent font-medium text-sm text-iasi-blue"
+                            placeholder="https://..."
+                          />
+                          <button 
+                            onClick={() => {
+                              const newImgs = [...(currentProject.carouselImages || [])];
+                              newImgs.splice(idx, 1);
+                              setCurrentProject({...currentProject, carouselImages: newImgs});
+                            }}
+                            className="p-3 text-red-500 hover:bg-red-50 rounded-sm transition-colors"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-8 border-t border-iasi-grey/5 bg-white flex justify-end gap-4">
+                <button 
+                  onClick={() => setIsProjectEditing(false)}
+                  className="px-8 py-3 font-black text-xs uppercase tracking-widest text-iasi-grey/60 hover:text-iasi-blue transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button 
+                  onClick={handleProjectSave}
+                  className="bg-iasi-blue text-white px-10 py-3 rounded-sm font-black text-xs tracking-widest hover:bg-iasi-accent hover:text-iasi-blue transition-all flex items-center gap-2 shadow-xl shadow-iasi-blue/20"
+                >
+                  <Save size={18} />
+                  GUARDAR PROYECTO
                 </button>
               </div>
             </motion.div>
