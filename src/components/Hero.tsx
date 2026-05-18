@@ -3,13 +3,13 @@ import { ArrowRight, ShieldCheck, Zap, Cog } from 'lucide-react';
 
 export default function Hero() {
   return (
-    <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden bg-iasi-blue pt-20 lg:pt-0">
+    <section id="inicio" className="relative min-h-screen flex items-center overflow-hidden bg-iasi-blue pt-32 lg:pt-40">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img 
           src="/IMG_8622.png" 
           alt="Industrial Electrical Infrastructure" 
-          className="w-full h-full object-cover object-center opacity-70 hover:opacity-90 transition-all duration-1000"
+          className="w-full h-full object-cover object-[center_25%] opacity-60 scale-105 hover:scale-100 transition-all duration-1000"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-iasi-blue via-iasi-blue/80 to-transparent"></div>
       </div>

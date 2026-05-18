@@ -1,0 +1,39 @@
+{
+  "entities": {
+    "catalogItem": {
+      "title": "Catalog Item",
+      "description": "An item in the energy equipment catalog",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "The name of the equipment" },
+        "category": { "type": "string", "description": "Category ID" },
+        "tag": { "type": "string", "description": "Display tag like 'Stock' or 'Nuevo'" },
+        "image": { "type": "string", "description": "Image URL" },
+        "specs": { "type": "array", "description": "List of technical specifications" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string" }
+      },
+      "required": ["name", "category", "tag", "image", "specs", "createdAt", "updatedAt", "createdBy"]
+    },
+    "admin": {
+      "title": "Admin",
+      "description": "Authorized administrator",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "role": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/catalog": {
+      "schema": "catalogItem",
+      "description": "The public equipment catalog"
+    },
+    "/admins/{adminId}": {
+      "schema": "admin",
+      "description": "Collection of authorized admin users"
+    }
+  }
+}

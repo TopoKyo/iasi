@@ -57,10 +57,21 @@ export default function Footer() {
           <div className="space-y-8">
             <h4 className="text-iasi-accent font-black uppercase tracking-widest text-xs border-b border-iasi-accent/20 pb-4 inline-block lg:block">Navegación</h4>
             <ul className="space-y-4">
-              {['Inicio', 'Nosotros', 'Servicios', 'Catálogo', 'Proyectos', 'Contacto'].map((item) => (
-                <li key={item}>
-                  <a href={`#${item.toLowerCase()}`} className="text-white/60 hover:text-iasi-accent transition-colors text-sm font-bold uppercase tracking-widest">
-                    {item}
+              {[
+                { name: 'Inicio', href: '#inicio' },
+                { name: 'Nosotros', href: '#nosotros' },
+                { name: 'Servicios', href: '#servicios' },
+                { name: 'Catálogo', href: '#catalogo' },
+                { name: 'Proyectos', href: '#proyectos' },
+                { name: 'Contacto', href: '#contacto' },
+                { name: 'Panel de Control', href: '/?view=admin' }
+              ].map((item) => (
+                <li key={item.name}>
+                  <a 
+                    href={item.href} 
+                    className={`hover:text-iasi-accent transition-colors text-sm font-bold uppercase tracking-widest ${item.name === 'Panel de Control' ? 'text-white/20' : 'text-white/60'}`}
+                  >
+                    {item.name}
                   </a>
                 </li>
               ))}
@@ -120,9 +131,14 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-8">
-          <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em] order-2 md:order-1">
-            © {currentYear} IASI RENTAL STORE CHILE. TODOS LOS DERECHOS RESERVADOS.
-          </p>
+          <div className="flex flex-col items-center md:items-start gap-2 order-2 md:order-1">
+            <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em]">
+              © {currentYear} IASI RENTAL STORE CHILE. TODOS LOS DERECHOS RESERVADOS.
+            </p>
+            <p className="text-white/40 text-[9px] font-bold uppercase tracking-widest">
+              Página creada por <a href="https://kobit.cl" target="_blank" rel="noopener noreferrer" className="text-iasi-accent hover:underline">kobit.cl</a>
+            </p>
+          </div>
           
           <div className="flex items-center gap-8 order-1 md:order-2">
             <button 

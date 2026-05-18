@@ -1,57 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Filter, Download, ExternalLink, Zap } from 'lucide-react';
-
-const PRODUCTS = [
-  {
-    id: 1,
-    name: "Transformador de Distribución 25kVA",
-    category: "distribucion",
-    tag: "Stock",
-    image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=2070&auto=format&fit=crop",
-    specs: ["Potencia: 25kVA", "Voltaje: 15/0.4kV", "Norma: IEC"]
-  },
-  {
-    id: 2,
-    name: "Subestación Unitaria 750kVA",
-    category: "subestaciones",
-    tag: "Premium",
-    image: "https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?q=80&w=2074&auto=format&fit=crop",
-    specs: ["Potencia: 750kVA", "Configuración: Radial", "Protección: IP55"]
-  },
-  {
-    id: 3,
-    name: "Equipo Compacto de Medida (ECM)",
-    category: "equipos",
-    tag: "Nuevo",
-    image: "https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?q=80&w=2070&auto=format&fit=crop",
-    specs: ["Voltaje: 12-24kV", "Precisión: CL 0.2S", "Material: Acero Galv."]
-  },
-  {
-    id: 4,
-    name: "Transformador Seco 1000kVA",
-    category: "seco",
-    tag: "Ecoeficiente",
-    image: "https://images.unsplash.com/photo-1558444479-2753d719d19c?q=80&w=2070&auto=format&fit=crop",
-    specs: ["Potencia: 1000kVA", "Aislamiento: Resina", "Uso: Interior"]
-  },
-  {
-    id: 5,
-    name: "Transformador de Poder 5MVA",
-    category: "poder",
-    tag: "Alta Tensión",
-    image: "https://images.unsplash.com/photo-1579450841234-49351e3a312b?q=80&w=2070&auto=format&fit=crop",
-    specs: ["Potencia: 5MVA", "Voltaje: 66/13.8kV", "Refrigeración: ONAN"]
-  },
-  {
-    id: 6,
-    name: "Celdas de Media Tensión SM6",
-    category: "equipos",
-    tag: "Protección",
-    image: "https://images.unsplash.com/photo-1610444533042-4948a731d16c?q=80&w=2070&auto=format&fit=crop",
-    specs: ["Modular", "Aislamiento: SF6", "Monitorización remota"]
-  }
-];
+import { getCatalogItems, CatalogItem } from '../lib/catalog';
 
 const CATEGORIES = [
   { id: 'todos', name: 'Todos' },
@@ -65,15 +15,58 @@ const CATEGORIES = [
 export default function Catalog() {
   const [activeCategory, setActiveCategory] = useState('todos');
   const [search, setSearch] = useState('');
+  const [products, setProducts] = useState<CatalogItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const filteredProducts = PRODUCTS.filter(p => {
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  async function loadProducts() {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getCatalogItems();
+      setProducts(data);
+    } catch (err) {
+      console.error("Error loading products:", err);
+      setError("No se pudo cargar el catálogo. Por favor intente más tarde.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const filteredProducts = (products || []).filter(p => {
     const matchesCategory = activeCategory === 'todos' || p.category === activeCategory;
-    const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase());
+    const name = p.name || '';
+    const matchesSearch = name.toLowerCase().includes((search || '').toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
+  if (loading) return (
+    <div className="col-span-full py-40 flex flex-col items-center justify-center bg-white">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-iasi-accent mb-6"></div>
+      <p className="text-iasi-grey/40 font-black uppercase tracking-[0.3em] text-xs animate-pulse">Consultando inventario IASI...</p>
+    </div>
+  );
+
+  if (error) return (
+    <div className="col-span-full py-40 flex flex-col items-center justify-center bg-white text-center px-6">
+      <Zap className="text-red-500 w-16 h-16 mb-6 opacity-20" size={64} />
+      <h3 className="text-2xl font-display font-black text-iasi-blue mb-4">ERROR DE CONEXIÓN</h3>
+      <p className="text-iasi-grey/60 mb-8 max-w-md">{error}</p>
+      <button 
+        onClick={loadProducts}
+        className="bg-iasi-blue text-white px-10 py-4 font-black uppercase tracking-widest text-xs hover:bg-iasi-accent hover:text-iasi-blue transition-all"
+      >
+        Reintentar
+      </button>
+    </div>
+  );
+
   return (
-    <section id="catalogo" className="py-24 bg-white">
+    <section id="catalogo" className="py-24 bg-white min-h-[600px]">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-4xl md:text-5xl font-display font-black text-iasi-blue mb-6">
@@ -120,7 +113,12 @@ export default function Catalog() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
         >
           <AnimatePresence mode='popLayout'>
-            {filteredProducts.map((product) => (
+            {loading ? (
+              <div className="col-span-full py-20 flex flex-col items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-iasi-accent mb-4"></div>
+                <p className="text-iasi-grey/40 font-bold uppercase tracking-widest text-xs">Cargando catálogo...</p>
+              </div>
+            ) : filteredProducts.map((product) => (
               <motion.div
                 layout
                 key={product.id}

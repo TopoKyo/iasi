@@ -18,15 +18,20 @@ export default function Navbar() {
     { name: 'Inicio', href: '#' },
     { name: 'Nosotros', href: '#nosotros' },
     { name: 'Servicios', href: '#servicios' },
+    { name: 'Equipo', href: '#equipo' },
     { name: 'Catálogo', href: '#catalogo' },
     { name: 'Proyectos', href: '#proyectos' },
     { name: 'Contacto', href: '#contacto' },
+    { name: 'Admin', href: '/?view=admin' },
   ];
 
   return (
     <>
-      {/* Top Bar */}
-      <div className="hidden lg:flex bg-iasi-blue text-white py-2 px-6 justify-between items-center text-xs font-medium uppercase tracking-widest border-b border-white/10">
+      <header className="fixed top-0 w-full z-50">
+        {/* Top Bar */}
+      <div className={`hidden lg:flex bg-iasi-blue text-white py-2 px-6 justify-between items-center text-xs font-medium uppercase tracking-widest border-b border-white/10 transition-all duration-500 ${
+        isScrolled ? 'h-0 py-0 opacity-0 overflow-hidden' : 'h-auto opacity-100'
+      }`}>
         <div className="flex gap-6">
           <a href="tel:+56220000000" className="flex items-center gap-2 hover:text-iasi-accent transition-colors">
             <Phone size={14} className="text-iasi-accent" />
@@ -49,10 +54,10 @@ export default function Navbar() {
       {/* Main Navbar */}
       <nav 
         id="navbar"
-        className={`fixed lg:relative top-0 w-full z-50 transition-all duration-300 ${
+        className={`w-full transition-all duration-500 ${
           isScrolled || isOpen 
-            ? 'bg-iasi-blue lg:bg-iasi-blue py-4 shadow-xl' 
-            : 'bg-transparent lg:bg-transparent py-6'
+            ? 'bg-white py-4 shadow-2xl border-b border-iasi-blue/5' 
+            : 'bg-transparent py-6'
         }`}
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
@@ -61,13 +66,13 @@ export default function Navbar() {
             <img 
               src="/logo.png" 
               alt="IASI Rental Store Chile Logo" 
-              className="h-12 w-auto object-contain"
+              className="h-10 lg:h-12 w-auto object-contain"
             />
             <div className="flex flex-col leading-none">
-              <span className="text-2xl font-display font-black tracking-tighter text-white">
+              <span className={`text-xl lg:text-2xl font-display font-black tracking-tighter transition-colors ${isScrolled || isOpen ? 'text-iasi-blue' : 'text-white'}`}>
                 IASI<span className="text-iasi-accent">RENTAL</span>
               </span>
-              <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-iasi-white/70">
+              <span className={`text-[10px] uppercase font-bold tracking-[0.3em] ${isScrolled || isOpen ? 'text-iasi-blue/40' : 'text-white/70'}`}>
                 Store Chile
               </span>
             </div>
@@ -79,23 +84,29 @@ export default function Navbar() {
               <a 
                 key={link.name} 
                 href={link.href}
-                className="text-sm font-semibold text-white/80 hover:text-iasi-accent transition-colors relative group py-2"
+                className={`text-sm font-bold transition-colors relative group py-2 ${
+                  isScrolled || isOpen ? 'text-iasi-blue hover:text-iasi-accent' : 'text-white/90 hover:text-iasi-accent'
+                }`}
               >
                 {link.name}
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-iasi-accent transition-all duration-300 group-hover:w-full"></span>
+                <span className={`absolute bottom-0 left-0 w-0 h-[2px] bg-iasi-accent transition-all duration-300 group-hover:w-full`}></span>
               </a>
             ))}
             <a 
               href="#catalogo" 
-              className="bg-iasi-accent text-iasi-blue px-6 py-2.5 rounded-sm font-bold text-sm hover:bg-white transition-all transform hover:-translate-y-0.5 shadow-lg shadow-iasi-accent/20"
+              className={`px-6 py-2.5 rounded-sm font-black text-xs tracking-widest transition-all transform hover:-translate-y-0.5 shadow-lg ${
+                isScrolled || isOpen 
+                  ? 'bg-iasi-blue text-white hover:bg-iasi-accent hover:text-iasi-blue shadow-iasi-blue/20' 
+                  : 'bg-iasi-accent text-iasi-blue hover:bg-white shadow-iasi-accent/20'
+              }`}
             >
-              VER CATÁLOGO
+              COTIZAR AHORA
             </a>
           </div>
 
           {/* Mobile Toggle */}
           <button 
-            className="lg:hidden text-white p-2"
+            className={`lg:hidden p-2 transition-colors ${isScrolled || isOpen ? 'text-iasi-blue' : 'text-white'}`}
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
@@ -147,6 +158,7 @@ export default function Navbar() {
           )}
         </AnimatePresence>
       </nav>
+    </header>
 
       {/* WhatsApp Floating Button */}
       <a 

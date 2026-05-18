@@ -1,41 +1,56 @@
 import { motion } from 'motion/react';
 
 export default function Clients() {
-  // We'll use names/placeholders to represent corporate logos
   const clients = [
-    { name: "AngloAmerican", color: "text-blue-800" },
-    { name: "Codelco", color: "text-orange-700" },
-    { name: "Antofagasta Minerals", color: "text-red-800" },
-    { name: "Enel", color: "text-cyan-600" },
-    { name: "Acciona", color: "text-red-700" },
-    { name: "BHP", color: "text-orange-900" },
-    { name: "Scheneider", color: "text-green-700" },
-    { name: "Siemens", color: "text-teal-600" }
+    { name: "Codelco", logo: "/marcas/codelco_default640x360.webp" },
+    { name: "Finning CAT", logo: "/marcas/finningCAT-tb.webp" },
+    { name: "Rockwood", logo: "/marcas/rockwood_logo.webp" },
+    { name: "Belfi", logo: "/marcas/Nueva carpeta/logo_belfi.png" },
+    { name: "Empresas", logo: "/marcas/images.webp" }
   ];
 
+  // Double the clients array for a seamless infinite loop
+  const doubledClients = [...clients, ...clients, ...clients];
+
   return (
-    <section className="py-20 bg-iasi-white border-y border-iasi-grey/5 overflow-hidden">
+    <section className="py-24 bg-white border-y border-iasi-grey/5 overflow-hidden">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
+        <div className="text-center mb-16">
           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-iasi-grey/40">
-            Confianza en Grandes Ligas
+            Nuestros Clientes y Alianzas Estratégicas
           </p>
         </div>
-        
-        <div className="flex flex-wrap justify-center items-center gap-12 lg:gap-24 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-1000">
-          {clients.map((client, idx) => (
-            <motion.div 
+      </div>
+      
+      {/* Moving Carousel Container */}
+      <div className="relative flex overflow-hidden">
+        <motion.div 
+          className="flex gap-16 lg:gap-32 items-center whitespace-nowrap"
+          animate={{
+            x: [0, -1000],
+          }}
+          transition={{
+            x: {
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: 30,
+              ease: "linear",
+            },
+          }}
+        >
+          {doubledClients.map((client, idx) => (
+            <div 
               key={idx}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              className={`text-2xl lg:text-3xl font-black italic tracking-tighter ${client.color}`}
+              className="w-48 lg:w-72 h-32 flex items-center justify-center grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 shrink-0"
             >
-              {client.name}
-            </motion.div>
+              <img 
+                src={client.logo} 
+                alt={client.name} 
+                className="max-w-full max-h-full object-contain filter drop-shadow-sm"
+              />
+            </div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
