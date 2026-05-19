@@ -2,11 +2,11 @@ import { motion } from 'motion/react';
 
 export default function Clients() {
   const clients = [
-    { name: "Codelco", logo: "/marcas/codelco_default640x360.webp" },
-    { name: "Finning CAT", logo: "/marcas/finningCAT-tb.webp" },
-    { name: "Rockwood", logo: "/marcas/rockwood_logo.webp" },
-    { name: "Belfi", logo: "/marcas/nueva_carpeta/logo_belfi.png" },
-    { name: "Empresas", logo: "/marcas/images.webp" }
+    { name: "Codelco", logo: "/marcas/codelco_default640x360.png" },
+    { name: "Finning CAT", logo: "/marcas/finningCAT-tb.png" },
+    { name: "Rockwood", logo: "/marcas/rockwood_logo.png" },
+    { name: "Belfi", logo: "/marcas/logo_belfi.png" },
+    { name: "Empresas", logo: "/marcas/images.png" }
   ];
 
   // Double the clients array for a seamless infinite loop
