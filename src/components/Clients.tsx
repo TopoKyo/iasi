@@ -1,12 +1,17 @@
 import { motion } from 'motion/react';
+import codelco from '../assets/clients/codelco.png';
+import finning from '../assets/clients/finning.png';
+import rockwood from '../assets/clients/rockwood.png';
+import belfi from '../assets/clients/belfi.png';
+import empresas from '../assets/clients/empresas.png';
 
 export default function Clients() {
   const clients = [
-    { name: "Codelco", logo: "/codelco_default640x360.png" },
-    { name: "Finning CAT", logo: "/finningCAT-tb.png" },
-    { name: "Rockwood", logo: "/rockwood_logo.png" },
-    { name: "Belfi", logo: "/logo_belfi.png" },
-    { name: "Empresas", logo: "/images.png" }
+    { name: "Codelco", logo: codelco },
+    { name: "Finning CAT", logo: finning },
+    { name: "Rockwood", logo: rockwood },
+    { name: "Belfi", logo: belfi },
+    { name: "Empresas", logo: empresas }
   ];
 
   // Increase multiplier for smoother infinite loop
@@ -47,7 +52,7 @@ export default function Clients() {
                 src={client.logo} 
                 alt={client.name} 
                 referrerPolicy="no-referrer"
-                className="max-w-full max-h-full object-contain filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                className="max-w-full max-h-full object-contain"
               />
             </div>
           ))}
