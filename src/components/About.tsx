@@ -10,7 +10,7 @@ export default function About() {
           <div className="relative">
             <div className="aspect-[4/5] rounded-sm overflow-hidden shadow-2xl relative z-10">
               <img 
-                src="https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=2070&auto=format&fit=crop" 
+                src="/IMG_9678-1.jpg" 
                 alt="IASI Operativo" 
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
