@@ -2,11 +2,11 @@ import { motion } from 'motion/react';
 
 export default function Clients() {
   const clients = [
-    { name: "Codelco", logo: "/marcas/codelco_default640x360.png" },
-    { name: "Finning CAT", logo: "/marcas/finningCAT-tb.png" },
-    { name: "Rockwood", logo: "/marcas/rockwood_logo.png" },
+    { name: "Codelco", logo: "/marcas/codelco_default640x360.webp" },
+    { name: "Finning CAT", logo: "/marcas/finningCAT-tb.webp" },
+    { name: "Rockwood", logo: "/marcas/rockwood_logo.webp" },
     { name: "Belfi", logo: "/marcas/logo_belfi.png" },
-    { name: "Empresas", logo: "/marcas/images.png" }
+    { name: "Empresas", logo: "/marcas/images.webp" }
   ];
 
   // Double the clients array for a seamless infinite loop
@@ -27,13 +27,13 @@ export default function Clients() {
         <motion.div 
           className="flex gap-16 lg:gap-32 items-center whitespace-nowrap"
           animate={{
-            x: [0, -1000],
+            x: [0, -1500],
           }}
           transition={{
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: 30,
+              duration: 40,
               ease: "linear",
             },
           }}
@@ -41,13 +41,13 @@ export default function Clients() {
           {doubledClients.map((client, idx) => (
             <div 
               key={idx}
-              className="w-48 lg:w-72 h-32 flex items-center justify-center grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 shrink-0"
+              className="w-48 lg:w-72 h-32 flex items-center justify-center shrink-0"
             >
               <img 
                 src={client.logo} 
                 alt={client.name} 
                 referrerPolicy="no-referrer"
-                className="max-w-full max-h-full object-contain filter drop-shadow-sm"
+                className="max-w-full max-h-full object-contain"
               />
             </div>
           ))}
