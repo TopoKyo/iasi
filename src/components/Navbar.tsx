@@ -63,7 +63,7 @@ export default function Navbar() {
           {/* Logo */}
           <a href="/" className="flex items-center gap-2 group">
             <img 
-              src="/images/logo.png" 
+              src="/images/logo_old.png" 
               alt="IASI Rental Store Chile Logo" 
               className="h-10 lg:h-12 w-auto object-contain"
             />
