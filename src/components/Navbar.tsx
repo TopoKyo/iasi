@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Phone, Mail, MessageCircle, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import logo from '../assets/general/logo.png';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,9 +65,8 @@ export default function Navbar() {
           {/* Logo */}
           <a href="/" className="flex items-center gap-2 group">
             <img 
-              src="/logo.png" 
+              src={logo} 
               alt="IASI Rental Store Chile Logo" 
-              referrerPolicy="no-referrer"
               className="h-10 lg:h-12 w-auto object-contain"
             />
             <div className="flex flex-col leading-none">
