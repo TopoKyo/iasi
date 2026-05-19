@@ -23,7 +23,7 @@ export default function Footer() {
           <div className="flex flex-col items-center lg:items-start space-y-8">
             <a href="/" className="flex items-center gap-2 group">
               <img 
-                src="/nueva carpeta/logo.png" 
+                src="/images/logo.png" 
                 alt="IASI Rental Store Chile Logo" 
                 className="h-10 w-auto object-contain"
               />

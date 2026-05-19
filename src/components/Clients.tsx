@@ -1,11 +1,11 @@
 import { motion } from 'motion/react';
 export default function Clients() {
   const clients = [
-    { name: "Codelco", logo: "/nueva carpeta/codelco.png" },
-    { name: "Finning CAT", logo: "/nueva carpeta/finning.png" },
-    { name: "Rockwood", logo: "/nueva carpeta/rockwood.png" },
-    { name: "Belfi", logo: "/nueva carpeta/belfi.png" },
-    { name: "Empresas", logo: "/nueva carpeta/empresas.png" }
+    { name: "Codelco", logo: "/images/clients/codelco.png" },
+    { name: "Finning CAT", logo: "/images/clients/finning.png" },
+    { name: "Rockwood", logo: "/images/clients/rockwood.png" },
+    { name: "Belfi", logo: "/images/clients/belfi.png" },
+    { name: "Empresas", logo: "/images/clients/empresas.png" }
   ];
 
   // Increase multiplier for smoother infinite loop
