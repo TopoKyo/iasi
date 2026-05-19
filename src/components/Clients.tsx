@@ -5,7 +5,7 @@ export default function Clients() {
     { name: "Codelco", logo: "/marcas/codelco_default640x360.webp" },
     { name: "Finning CAT", logo: "/marcas/finningCAT-tb.webp" },
     { name: "Rockwood", logo: "/marcas/rockwood_logo.webp" },
-    { name: "Belfi", logo: "/marcas/Nueva carpeta/logo_belfi.png" },
+    { name: "Belfi", logo: "/marcas/nueva_carpeta/logo_belfi.png" },
     { name: "Empresas", logo: "/marcas/images.webp" }
   ];
 

@@ -26,6 +26,7 @@ export default function Footer() {
               <img 
                 src="/logo.png" 
                 alt="IASI Rental Store Chile Logo" 
+                referrerPolicy="no-referrer"
                 className="h-10 w-auto object-contain"
               />
               <div className="flex flex-col leading-none">
