@@ -52,7 +52,7 @@ export default function Clients() {
                 src={client.logo} 
                 alt={client.name} 
                 referrerPolicy="no-referrer"
-                className="max-w-full max-h-full object-contain"
+                className="max-w-full max-h-full object-contain filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
               />
             </div>
           ))}
