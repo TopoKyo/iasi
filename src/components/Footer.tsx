@@ -1,6 +1,4 @@
 import { ArrowUp, Mail, Phone, MapPin, Linkedin, Instagram, Facebook } from 'lucide-react';
-import logo from '../assets/general/logo.png';
-
 export default function Footer() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -25,7 +23,7 @@ export default function Footer() {
           <div className="flex flex-col items-center lg:items-start space-y-8">
             <a href="/" className="flex items-center gap-2 group">
               <img 
-                src={logo} 
+                src="/nueva carpeta/logo.png" 
                 alt="IASI Rental Store Chile Logo" 
                 className="h-10 w-auto object-contain"
               />

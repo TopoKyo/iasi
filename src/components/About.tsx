@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
 import { CheckCircle2, Factory, Construction, HardHat } from 'lucide-react';
-import aboutImage from '../assets/general/about.jpg';
 
 export default function About() {
   return (
@@ -11,7 +10,7 @@ export default function About() {
           <div className="relative">
             <div className="aspect-[4/5] rounded-sm overflow-hidden shadow-2xl relative z-10">
               <img 
-                src={aboutImage} 
+                src="/nueva carpeta/about.jpg" 
                 alt="IASI Operativo" 
                 className="w-full h-full object-cover"
               />

@@ -1,17 +1,11 @@
 import { motion } from 'motion/react';
-import codelco from '../assets/clients/codelco.png';
-import finning from '../assets/clients/finning.png';
-import rockwood from '../assets/clients/rockwood.png';
-import belfi from '../assets/clients/belfi.png';
-import empresas from '../assets/clients/empresas.png';
-
 export default function Clients() {
   const clients = [
-    { name: "Codelco", logo: codelco },
-    { name: "Finning CAT", logo: finning },
-    { name: "Rockwood", logo: rockwood },
-    { name: "Belfi", logo: belfi },
-    { name: "Empresas", logo: empresas }
+    { name: "Codelco", logo: "/nueva carpeta/codelco.png" },
+    { name: "Finning CAT", logo: "/nueva carpeta/finning.png" },
+    { name: "Rockwood", logo: "/nueva carpeta/rockwood.png" },
+    { name: "Belfi", logo: "/nueva carpeta/belfi.png" },
+    { name: "Empresas", logo: "/nueva carpeta/empresas.png" }
   ];
 
   // Increase multiplier for smoother infinite loop

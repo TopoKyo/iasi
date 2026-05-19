@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
 import { ArrowRight, ShieldCheck, Zap, Cog } from 'lucide-react';
-import heroImage from '../assets/general/hero.png';
 
 export default function Hero() {
   return (
@@ -8,7 +7,7 @@ export default function Hero() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img 
-          src={heroImage} 
+          src="/nueva carpeta/hero.png" 
           alt="Industrial Electrical Infrastructure" 
           className="w-full h-full object-cover object-[center_25%] opacity-60 scale-105 hover:scale-100 transition-all duration-1000"
         />
