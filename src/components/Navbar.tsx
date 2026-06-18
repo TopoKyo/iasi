@@ -28,13 +28,11 @@ export default function Navbar() {
     <>
       <header className="fixed top-0 w-full z-50">
         {/* Top Bar */}
-      <div className={`hidden lg:flex bg-iasi-blue text-white py-2 px-6 justify-between items-center text-xs font-medium uppercase tracking-widest border-b border-white/10 transition-all duration-500 ${
-        isScrolled ? 'h-0 py-0 opacity-0 overflow-hidden' : 'h-auto opacity-100'
-      }`}>
+      <div className="hidden lg:flex bg-iasi-blue text-white py-2 px-6 justify-between items-center text-xs font-medium uppercase tracking-widest border-b border-white/10 w-full">
         <div className="flex gap-6">
-          <a href="tel:+56220000000" className="flex items-center gap-2 hover:text-iasi-accent transition-colors">
+          <a href="tel:+56232328249" className="flex items-center gap-2 hover:text-iasi-accent transition-colors">
             <Phone size={14} className="text-iasi-accent" />
-            +56 2 2000 0000
+            (+56) 232 328 249
           </a>
           <a href="mailto:contacto@iasi.cl" className="flex items-center gap-2 hover:text-iasi-accent transition-colors">
             <Mail size={14} className="text-iasi-accent" />
@@ -42,7 +40,7 @@ export default function Navbar() {
           </a>
         </div>
         <div className="flex items-center gap-4">
-          <span className="opacity-70">Lunes - Viernes: 08:30 - 18:00</span>
+          <span className="opacity-70">Lunes - Viernes: 8:00 - 18:00</span>
           <div className="h-3 w-[1px] bg-white/20"></div>
           <a href="#contacto" className="text-iasi-accent hover:underline flex items-center gap-1">
             Cotizar Proyecto <ArrowRight size={12} />
@@ -67,14 +65,6 @@ export default function Navbar() {
               alt="IASI Rental Store Chile Logo" 
               className="h-10 lg:h-12 w-auto object-contain"
             />
-            <div className="flex flex-col leading-none">
-              <span className={`text-xl lg:text-2xl font-display font-black tracking-tighter transition-colors ${isScrolled || isOpen ? 'text-iasi-blue' : 'text-white'}`}>
-                IASI<span className="text-iasi-accent">RENTAL</span>
-              </span>
-              <span className={`text-[10px] uppercase font-bold tracking-[0.3em] ${isScrolled || isOpen ? 'text-iasi-blue/40' : 'text-white/70'}`}>
-                Store Chile
-              </span>
-            </div>
           </a>
 
           {/* Desktop Nav */}

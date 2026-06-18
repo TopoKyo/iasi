@@ -4,7 +4,6 @@ import Hero from './components/Hero';
 import Stats from './components/Stats';
 import About from './components/About';
 import Services from './components/Services';
-import Expertise from './components/Expertise';
 import Team from './components/Team';
 import Catalog from './components/Catalog';
 import Projects from './components/Projects';
@@ -118,7 +117,6 @@ export default function App() {
         <Stats />
         <About />
         <Services />
-        <Expertise />
         <Team />
         <Catalog />
         <Projects />

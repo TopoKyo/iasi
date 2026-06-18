@@ -22,6 +22,12 @@ export interface Project {
   createdAt?: any;
   updatedAt?: any;
   createdBy?: string;
+  subtitle?: string;
+  empresa?: string;
+  localizacion?: string;
+  ano?: string;
+  programa?: string;
+  escala?: string;
 }
 
 export async function getProjects(): Promise<Project[]> {
@@ -41,7 +47,13 @@ export async function getProjects(): Promise<Project[]> {
         carouselImages: Array.isArray(data.carouselImages) ? data.carouselImages : [],
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
-        createdBy: data.createdBy
+        createdBy: data.createdBy,
+        subtitle: data.subtitle || '',
+        empresa: data.empresa || '',
+        localizacion: data.localizacion || '',
+        ano: data.ano || '',
+        programa: data.programa || '',
+        escala: data.escala || ''
       } as Project;
     });
   } catch (error) {

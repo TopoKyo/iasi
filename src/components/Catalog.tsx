@@ -12,6 +12,90 @@ const CATEGORIES = [
   { id: 'equipos', name: 'Equipos Auxiliares' }
 ];
 
+const DEFAULT_PRODUCTS: CatalogItem[] = [
+  {
+    id: 'cat-1',
+    name: 'SUBESTACIÓN ELEVADORA UNITARIA',
+    description: 'Venta y arriendo de subestaciones elevadoras unitarias.',
+    category: 'subestaciones',
+    tag: 'IASI THE RENTAL STORE CHILE',
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800&auto=format&fit=crop',
+    specs: ['Subestaciones tipo unitaria', 'Media y alta tensión', 'Certificación completa'],
+  },
+  {
+    id: 'cat-2',
+    name: 'TRANSFORMADOR PAD MOUNTED',
+    description: 'Venta y arriendo de transformadores pad mounted.',
+    category: 'distribucion',
+    tag: 'IASI THE RENTAL STORE CHILE',
+    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop',
+    specs: ['Gabinete de seguridad', 'Instalación intemperie', 'Eficiencia energética'],
+  },
+  {
+    id: 'cat-3',
+    name: 'REPARACIÓN Y REPOTENCIACIÓN',
+    description: 'Reparación y repotenciación de transformadores y ECM.',
+    category: 'equipos',
+    tag: 'IASI THE RENTAL STORE CHILE',
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=800&auto=format&fit=crop',
+    specs: ['Restauración de devanados', 'Aumento de capacidad', 'Pruebas dieléctricas'],
+  },
+  {
+    id: 'cat-4',
+    name: 'TRANSFORMADOR EN ACEITE',
+    description: 'Venta y arriendo de transformadores sumergidos en aceite.',
+    category: 'distribucion',
+    tag: 'IASI THE RENTAL STORE CHILE',
+    image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=800&auto=format&fit=crop',
+    specs: ['Refrigeración ONAN', 'Aislamiento mineral / vegetal', 'Alta durabilidad'],
+  },
+  {
+    id: 'cat-5',
+    name: 'TRANSFORMADOR DE PODER',
+    description: 'Venta y arriendo de transformadores de poder.',
+    category: 'poder',
+    tag: 'IASI THE RENTAL STORE CHILE',
+    image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=800&auto=format&fit=crop',
+    specs: ['Grandes potencias', 'Tratamiento al vacío', 'Montaje en terreno'],
+  },
+  {
+    id: 'cat-6',
+    name: 'MANTENCIÓN Y CERTIFICACIÓN',
+    description: 'Mantención y certificación de transformadores y ECM.',
+    category: 'equipos',
+    tag: 'IASI THE RENTAL STORE CHILE',
+    image: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?q=80&w=800&auto=format&fit=crop',
+    specs: ['Protocolos SEC', 'Ensayos de rutina', 'Informes de laboratorio'],
+  },
+  {
+    id: 'cat-7',
+    name: 'TRANSFORMADOR SECO',
+    description: 'Venta y arriendo de transformadores secos.',
+    category: 'seco',
+    tag: 'IASI THE RENTAL STORE CHILE',
+    image: 'https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?q=80&w=800&auto=format&fit=crop',
+    specs: ['Resina epóxica autocombatible', 'Uso interior / comercial', 'Cero riesgo de fuga'],
+  },
+  {
+    id: 'cat-8',
+    name: 'EQUIPO COMPACTO DE MEDIDA',
+    description: 'Venta y arriendo de equipos compactos de medida.',
+    category: 'equipos',
+    tag: 'IASI THE RENTAL STORE CHILE',
+    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop',
+    specs: ['Medición compacta integrada', 'Media tensión SEC', 'Protección intemperie'],
+  },
+  {
+    id: 'cat-9',
+    name: 'ANÁLISIS DE ACEITE',
+    description: 'Análisis de humedad, gases y capacidad dieléctrica del aceite.',
+    category: 'equipos',
+    tag: 'IASI THE RENTAL STORE CHILE',
+    image: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=800&auto=format&fit=crop',
+    specs: ['Cromatografía de gases', 'Contenido de humedad', 'Rigidez dieléctrica'],
+  }
+];
+
 export default function Catalog() {
   const [activeCategory, setActiveCategory] = useState('todos');
   const [search, setSearch] = useState('');
@@ -28,10 +112,16 @@ export default function Catalog() {
     setError(null);
     try {
       const data = await getCatalogItems();
-      setProducts(data);
+      if (data && data.length > 0) {
+        const defaultNames = DEFAULT_PRODUCTS.map(p => p.name.toUpperCase());
+        const filteredDB = data.filter(p => !defaultNames.includes(p.name.toUpperCase()));
+        setProducts([...DEFAULT_PRODUCTS, ...filteredDB]);
+      } else {
+        setProducts(DEFAULT_PRODUCTS);
+      }
     } catch (err) {
-      console.error("Error loading products:", err);
-      setError("No se pudo cargar el catálogo. Por favor intente más tarde.");
+      console.error("Error loading products, using defaults:", err);
+      setProducts(DEFAULT_PRODUCTS);
     } finally {
       setLoading(false);
     }
@@ -46,36 +136,16 @@ export default function Catalog() {
     return matchesCategory && matchesSearch;
   });
 
-  if (loading) return (
-    <div className="col-span-full py-40 flex flex-col items-center justify-center bg-white">
-      <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-iasi-accent mb-6"></div>
-      <p className="text-iasi-grey/40 font-black uppercase tracking-[0.3em] text-xs animate-pulse">Consultando inventario IASI...</p>
-    </div>
-  );
-
-  if (error) return (
-    <div className="col-span-full py-40 flex flex-col items-center justify-center bg-white text-center px-6">
-      <Zap className="text-red-500 w-16 h-16 mb-6 opacity-20" size={64} />
-      <h3 className="text-2xl font-display font-black text-iasi-blue mb-4">ERROR DE CONEXIÓN</h3>
-      <p className="text-iasi-grey/60 mb-8 max-w-md">{error}</p>
-      <button 
-        onClick={loadProducts}
-        className="bg-iasi-blue text-white px-10 py-4 font-black uppercase tracking-widest text-xs hover:bg-iasi-accent hover:text-iasi-blue transition-all"
-      >
-        Reintentar
-      </button>
-    </div>
-  );
-
   return (
     <section id="catalogo" className="py-24 bg-white min-h-[600px]">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-4xl md:text-5xl font-display font-black text-iasi-blue mb-6">
-            CATÁLOGO DE <span className="text-iasi-accent">EQUIPOS</span>
+          <span className="text-xs text-iasi-grey/40 font-black uppercase tracking-[0.3em] block mb-2">CATÁLOGO DE PRODUCTOS Y SERVICIOS</span>
+          <h2 className="text-4xl md:text-5xl font-display font-black text-iasi-blue mb-4">
+            IASI THE <span className="text-iasi-accent">RENTAL STORE</span>
           </h2>
-          <p className="text-iasi-grey/60 font-medium">
-            Explore nuestra amplia gama de soluciones energéticas certificadas. Equipamiento de alto rendimiento listo para ser desplegado en su proyecto.
+          <p className="text-iasi-grey/60 font-medium uppercase tracking-wider text-xs font-black">
+            VENTA Y ARRIENDO DE TRANSFORMADORES, SUBESTACIONES Y EQUIPOS COMPACTOS
           </p>
         </div>
 
@@ -128,7 +198,7 @@ export default function Catalog() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                className="group border border-iasi-grey/5 hover:border-iasi-accent transition-all duration-500 bg-iasi-white flex flex-col h-full"
+                className="group border border-iasi-grey/5 hover:border-iasi-accent transition-all duration-500 bg-iasi-white flex flex-col h-full rounded-sm overflow-hidden shadow-md"
               >
                 <div className="relative aspect-video overflow-hidden">
                   <img 
@@ -138,35 +208,35 @@ export default function Catalog() {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute top-4 left-4">
-                    <span className="bg-iasi-accent text-iasi-blue text-[10px] font-black uppercase px-3 py-1 rounded-full shadow-lg">
+                    <span className="bg-iasi-blue text-white text-[9px] font-black uppercase px-3 py-1 rounded-sm tracking-wider shadow-lg">
                       {product.tag}
                     </span>
                   </div>
                   <div className="absolute inset-0 bg-iasi-blue/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                    <button className="bg-white text-iasi-blue p-3 rounded-full hover:bg-iasi-accent transition-colors shadow-xl">
+                    <a href="#contacto" className="bg-white text-iasi-blue p-3 rounded-full hover:bg-iasi-accent transition-colors shadow-xl">
                       <ExternalLink size={20} />
-                    </button>
-                    <button className="bg-white text-iasi-blue p-3 rounded-full hover:bg-iasi-accent transition-colors shadow-xl">
-                      <Download size={20} />
-                    </button>
+                    </a>
                   </div>
                 </div>
 
                 <div className="p-8 flex flex-col flex-grow">
-                  <h3 className="text-xl font-display font-black text-iasi-blue mb-2 leading-tight group-hover:text-iasi-accent transition-colors">
+                  <span className="text-[9px] text-iasi-accent font-black tracking-widest uppercase mb-1">
+                    {product.tag}
+                  </span>
+                  <h3 className="text-lg font-display font-black text-iasi-blue mb-3 leading-tight group-hover:text-iasi-accent transition-colors">
                     {product.name}
                   </h3>
                   
                   {product.description && (
-                    <p className="text-xs text-iasi-grey/60 mb-4 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-iasi-grey/70 mb-4 line-clamp-3 leading-relaxed">
                       {product.description}
                     </p>
                   )}
                   
-                  <div className="space-y-2 mb-8 flex-grow">
-                    {product.specs.map((spec, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs font-bold text-iasi-grey/60 uppercase">
-                        <Zap size={12} className="text-iasi-accent" />
+                  <div className="space-y-1.5 mb-8 flex-grow border-t border-iasi-grey/5 pt-4">
+                    {product.specs && product.specs.map((spec, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-[11px] font-bold text-iasi-grey/60 uppercase tracking-wide">
+                        <Zap size={10} className="text-iasi-accent shrink-0" />
                         {spec}
                       </div>
                     ))}
@@ -176,7 +246,7 @@ export default function Catalog() {
                     href="#contacto" 
                     className="w-full border-2 border-iasi-blue text-iasi-blue py-3 rounded-sm font-black text-xs uppercase tracking-widest hover:bg-iasi-blue hover:text-white transition-all text-center"
                   >
-                    COTIZAR AHORA
+                    MÁS INFORMACIÓN
                   </a>
                 </div>
               </motion.div>

@@ -60,7 +60,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-xs font-black uppercase tracking-widest text-iasi-grey/40 mb-1">Central de Ventas</p>
-                  <p className="text-xl font-bold text-iasi-blue">+56 2 2000 0000</p>
+                  <p className="text-xl font-bold text-iasi-blue">(+56) 232 328 249</p>
                 </div>
               </div>
 
@@ -79,8 +79,28 @@ export default function Contact() {
                   <MapPin size={24} />
                 </div>
                 <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-iasi-grey/40 mb-1">Nuestra Casa Matriz</p>
-                  <p className="text-xl font-bold text-iasi-blue leading-tight">Camino Industrial 1234, <br />Quilicura, Santiago, Chile</p>
+                  <p className="text-xs font-black uppercase tracking-widest text-iasi-grey/40 mb-1">Oficina Comercial</p>
+                  <p className="text-xl font-bold text-iasi-blue leading-tight">Manquehue Sur 520, <br />Las Condes, Chile</p>
+                </div>
+              </div>
+
+              <div className="flex gap-6 items-start group">
+                <div className="bg-iasi-blue p-4 rounded-sm text-white group-hover:bg-iasi-accent group-hover:text-iasi-blue transition-all shadow-xl shadow-iasi-blue/20">
+                  <MapPin size={24} />
+                </div>
+                <div>
+                  <p className="text-xs font-black uppercase tracking-widest text-iasi-grey/40 mb-1">Centro de operaciones</p>
+                  <p className="text-xl font-bold text-iasi-blue leading-tight">El Taqueral parcela 18A, <br />Lampa, Chile</p>
+                </div>
+              </div>
+
+              <div className="flex gap-6 items-start group">
+                <div className="bg-iasi-blue p-4 rounded-sm text-white group-hover:bg-iasi-accent group-hover:text-iasi-blue transition-all shadow-xl shadow-iasi-blue/20">
+                  <Clock size={24} />
+                </div>
+                <div>
+                  <p className="text-xs font-black uppercase tracking-widest text-iasi-grey/40 mb-1">Horario de Negocio</p>
+                  <p className="text-xl font-bold text-iasi-blue leading-tight">Lunes - Viernes: 8:00 - 18:00</p>
                 </div>
               </div>
             </div>
@@ -190,6 +210,77 @@ export default function Contact() {
                 </motion.form>
               )}
             </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Maps Section */}
+        <div id="ubicaciones" className="mt-24 border-t border-iasi-grey/10 pt-20">
+          <div className="text-center mb-16">
+            <span className="h-[2px] w-8 bg-iasi-blue mx-auto block mb-4"></span>
+            <h3 className="text-3xl md:text-4xl font-display font-black text-iasi-blue tracking-tight uppercase">
+              NUESTRAS <span className="text-iasi-accent">INSTALACIONES</span>
+            </h3>
+            <p className="text-xs text-iasi-grey/60 mt-3 max-w-lg mx-auto uppercase tracking-widest font-black">
+              Visitas programadas y despacho logístico a nivel nacional.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Map 1: Oficina */}
+            <div className="bg-white border border-iasi-grey/10 shadow-2xl relative overflow-hidden rounded-sm group hover:border-iasi-accent transition-all duration-500">
+              <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-iasi-accent opacity-30 group-hover:opacity-100 transition-opacity"></div>
+              <div className="p-8 border-b border-iasi-grey/5">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="bg-iasi-blue p-3 text-white rounded-sm group-hover:bg-iasi-accent group-hover:text-iasi-blue transition-all duration-300">
+                    <MapPin size={22} />
+                  </div>
+                  <div>
+                    <h4 className="font-display font-black text-iasi-blue tracking-tight text-xl">OFICINA COMERCIAL</h4>
+                    <p className="text-[10px] text-iasi-grey/40 font-black uppercase tracking-wider">Santiago Oriente</p>
+                  </div>
+                </div>
+                <p className="text-sm font-semibold text-iasi-grey/70 uppercase tracking-wider leading-relaxed">
+                  Manquehue Sur 520, Las Condes, Chile
+                </p>
+              </div>
+              <div className="h-[350px] w-full relative">
+                <iframe
+                  title="Oficina Las Condes - IASI"
+                  src="https://maps.google.com/maps?q=Manquehue%20Sur%20520,%20Las%20Condes,%20Chile&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  className="w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-700"
+                  allowFullScreen
+                  loading="lazy"
+                ></iframe>
+              </div>
+            </div>
+
+            {/* Map 2: Centro de operaciones */}
+            <div className="bg-white border border-iasi-grey/10 shadow-2xl relative overflow-hidden rounded-sm group hover:border-iasi-accent transition-all duration-500">
+              <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-iasi-accent opacity-30 group-hover:opacity-100 transition-opacity"></div>
+              <div className="p-8 border-b border-iasi-grey/5">
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="bg-iasi-blue p-3 text-white rounded-sm group-hover:bg-iasi-accent group-hover:text-iasi-blue transition-all duration-300">
+                    <MapPin size={22} />
+                  </div>
+                  <div>
+                    <h4 className="font-display font-black text-iasi-blue tracking-tight text-xl">CENTRO DE OPERACIONES</h4>
+                    <p className="text-[10px] text-iasi-grey/40 font-black uppercase tracking-wider">Santiago Norte</p>
+                  </div>
+                </div>
+                <p className="text-sm font-semibold text-iasi-grey/70 uppercase tracking-wider leading-relaxed">
+                  El Taqueral parcela 18A, Lampa, Chile
+                </p>
+              </div>
+              <div className="h-[350px] w-full relative">
+                <iframe
+                  title="Centro de operaciones Lampa - IASI"
+                  src="https://maps.google.com/maps?q=El%20Taqueral%20parcela%2018A,%20Lampa,%20Chile&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  className="w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-700"
+                  allowFullScreen
+                  loading="lazy"
+                ></iframe>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,52 +1,45 @@
 import { motion } from 'motion/react';
 import { 
-  Zap, 
-  Settings, 
   Wrench, 
-  Activity, 
+  Factory, 
+  Hammer, 
+  Lightbulb, 
+  Zap, 
   FlaskConical, 
-  Stethoscope, 
-  ArrowRight,
-  TrendingUp
+  ArrowRight
 } from 'lucide-react';
 
 export default function Services() {
   const services = [
     {
-      icon: Zap,
-      title: "Arriendo de Transformadores",
-      desc: "Soluciones inmediatas para baja, media y alta tensión con entrega en todo Chile.",
-      features: ["Stock permanente", "Pruebas de rutina", "Logística propia"]
-    },
-    {
-      icon: Settings,
-      title: "Venta de Equipos",
-      desc: "Representación de marcas líderes y fabricación a medida para su industria.",
-      features: ["Transformadores secos", "De aceite", "Compactos"]
-    },
-    {
-      icon: TrendingUp,
-      title: "Subestaciones Elevadoras",
-      desc: "Implementación completa de subestaciones tipo unitaria, compacta y de intemperie.",
-      features: ["Llave en mano", "Puesta en servicio", "Ingeniería"]
-    },
-    {
       icon: Wrench,
-      title: "Mantención Preventiva",
-      desc: "Planes de mantenimiento especializados para extender la vida útil de sus activos.",
-      features: ["Certificación SEC", "Filtrado de aceite", "Pintura"]
+      title: "MANTENIMIENTO",
+      desc: "Mantenimiento de equipos rutinarios, correctivos, programados, preventivos y/o predictivos."
+    },
+    {
+      icon: Factory,
+      title: "FABRICACIÓN",
+      desc: "Se diseñan, fabrican y prueban de acuerdo a las especificaciones del cliente."
+    },
+    {
+      icon: Hammer,
+      title: "REPARACIÓN",
+      desc: "Se reparan equipos eléctricos de cualquier especificación."
+    },
+    {
+      icon: Lightbulb,
+      title: "TRABAJAMOS SOBRE TUS IDEAS",
+      desc: "Tú eliges las especificaciones."
+    },
+    {
+      icon: Zap,
+      title: "RÁPIDO Y FIABLE",
+      desc: "Servicio de traslado, armado, procesos y pruebas de transformadores de poder."
     },
     {
       icon: FlaskConical,
-      title: "Análisis de Aceite",
-      desc: "Estudio físico-químico y de gases disueltos (Cromatografía) en nuestro laboratorio.",
-      features: ["Informe técnico", "Predicciones de falla", "Certificado"]
-    },
-    {
-      icon: Activity,
-      title: "Estudios Eléctricos",
-      desc: "Análisis de mallas de tierra, flujo de potencia y cortocircuitos bajo norma.",
-      features: ["Ingeniería de detalle", "Simulaciones", "Consultoría"]
+      title: "LABORATORIO DE INNOVACIÓN",
+      desc: "Departamento encargado de implementar innovaciones y desarrollo de nuevas tecnologías."
     }
   ];
 
@@ -57,15 +50,17 @@ export default function Services() {
           <div className="max-w-2xl">
             <div className="flex items-center gap-3 mb-4">
               <span className="h-[2px] w-8 bg-iasi-blue"></span>
-              <span className="text-iasi-blue font-bold tracking-[0.2em] text-sm uppercase">Nuestro Expertis</span>
+              <span className="text-iasi-blue font-bold tracking-[0.2em] text-sm uppercase">
+                IASI THE RENTAL STORE CHILE
+              </span>
             </div>
             <h2 className="text-4xl md:text-5xl font-display font-black text-iasi-blue mb-0">
               SOLUCIONES ENERGÉTICAS <br />
               INTEGRALES <span className="text-iasi-accent font-light">360°</span>
             </h2>
           </div>
-          <p className="text-iasi-grey/60 max-w-sm text-sm mt-6 md:mt-0 font-medium border-l-2 border-iasi-accent pl-6">
-            Certificados bajo los más altos estándares nacionales e internacionales. Calidad que impulsa la minería y gran industria chilena.
+          <p className="text-iasi-grey/80 max-w-sm text-sm mt-6 md:mt-0 font-bold border-l-4 border-iasi-accent pl-6 uppercase tracking-wider">
+            EXPERTOS EN SERVICIOS DE EQUIPAMIENTO ELÉCTRICO
           </p>
         </div>
 
@@ -77,7 +72,7 @@ export default function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
               viewport={{ once: true }}
-              className="bg-white p-10 group hover:bg-iasi-blue transition-all duration-500 shadow-xl shadow-iasi-blue/5 relative overflow-hidden flex flex-col h-full"
+              className="bg-white p-10 group hover:bg-iasi-blue transition-all duration-500 shadow-xl shadow-iasi-blue/5 relative overflow-hidden flex flex-col h-full border border-iasi-grey/5 hover:border-transparent rounded-sm"
             >
               {/* Icon Background Circle */}
               <div className="absolute top-0 right-0 p-6 opacity-[0.03] text-iasi-blue group-hover:text-white transition-colors">
@@ -98,20 +93,11 @@ export default function Services() {
                 {service.desc}
               </p>
 
-              <ul className="space-y-3 mb-8">
-                {service.features.map((feature, fIdx) => (
-                  <li key={fIdx} className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-iasi-blue group-hover:text-iasi-accent transition-colors">
-                    <span className="w-1.5 h-1.5 bg-iasi-accent rounded-full"></span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
               <a 
                 href="#contacto" 
-                className="inline-flex items-center gap-2 text-iasi-accent font-black text-sm uppercase group-hover:gap-4 transition-all"
+                className="inline-flex items-center gap-2 text-iasi-blue group-hover:text-iasi-accent font-black text-xs tracking-wider uppercase group-hover:gap-4 transition-all"
               >
-                SABER MÁS <ArrowRight size={18} />
+                COTIZAR SERVICIO <ArrowRight size={18} />
               </a>
             </motion.div>
           ))}

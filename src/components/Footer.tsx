@@ -27,14 +27,6 @@ export default function Footer() {
                 alt="IASI Rental Store Chile Logo" 
                 className="h-10 w-auto object-contain"
               />
-              <div className="flex flex-col leading-none">
-                <span className="text-2xl font-display font-black tracking-tighter text-white">
-                  IASI<span className="text-iasi-accent">RENTAL</span>
-                </span>
-                <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-white/50">
-                  Store Chile
-                </span>
-              </div>
             </a>
             <p className="text-white/50 text-sm leading-relaxed max-w-xs uppercase tracking-widest font-medium text-[10px]">
               Soluciones integrales de energía para los desafíos más complejos del territorio nacional. Calidad, seguridad y eficiencia en cada kilovoltio.
@@ -102,23 +94,23 @@ export default function Footer() {
           <div className="space-y-8">
             <h4 className="text-iasi-accent font-black uppercase tracking-widest text-xs border-b border-iasi-accent/20 pb-4 inline-block lg:block">Ubicaciones</h4>
             <div className="space-y-6">
-              <div className="flex items-center lg:items-start justify-center lg:justify-start gap-4 text-white/60">
+              <div className="flex items-start justify-center lg:justify-start gap-4 text-white/60">
                 <MapPin size={24} className="text-iasi-accent shrink-0" />
                 <p className="text-xs uppercase tracking-widest font-bold leading-relaxed">
-                  Casa Matriz: <br />
-                  Quilicura, Santiago, Chile
+                  Oficina Comercial: <br />
+                  Manquehue Sur 520, <br />Las Condes, Chile
                 </p>
               </div>
-              <div className="flex items-center lg:items-start justify-center lg:justify-start gap-4 text-white/60">
+              <div className="flex items-start justify-center lg:justify-start gap-4 text-white/60">
                 <MapPin size={24} className="text-iasi-accent shrink-0" />
                 <p className="text-xs uppercase tracking-widest font-bold leading-relaxed">
-                  Logística Norte: <br />
-                  Antofagasta, Chile
+                  Centro de operaciones: <br />
+                  El Taqueral Parcela 18A, <br />Lampa, Chile
                 </p>
               </div>
-              <a href="tel:+56220000000" className="flex items-center justify-center lg:justify-start gap-4 text-white/60 hover:text-iasi-accent transition-colors">
+              <a href="tel:+56232328249" className="flex items-center justify-center lg:justify-start gap-4 text-white/60 hover:text-iasi-accent transition-colors">
                 <Phone size={20} className="text-iasi-accent shrink-0" />
-                <span className="text-xs uppercase tracking-widest font-bold">+56 2 2000 0000</span>
+                <span className="text-xs uppercase tracking-widest font-bold">(+56) 232 328 249</span>
               </a>
               <a href="mailto:contacto@iasi.cl" className="flex items-center justify-center lg:justify-start gap-4 text-white/60 hover:text-iasi-accent transition-colors">
                 <Mail size={20} className="text-iasi-accent shrink-0" />
