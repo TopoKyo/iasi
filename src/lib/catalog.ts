@@ -4,6 +4,7 @@ import {
   updateDoc, 
   deleteDoc, 
   doc, 
+  getDoc,
   getDocs, 
   query, 
   orderBy,
@@ -93,6 +94,30 @@ export async function updateCatalogItem(id: string, updates: Partial<Omit<Catalo
     });
   } catch (error) {
     handleFirestoreError(error, OperationType.UPDATE, `${COLLECTION_NAME}/${id}`);
+  }
+}
+
+export async function getCatalogItemById(id: string): Promise<CatalogItem | null> {
+  try {
+    const docRef = doc(db, COLLECTION_NAME, id);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) return null;
+    const data = docSnap.data();
+    return {
+      id: docSnap.id,
+      name: data.name || 'Equipo sin nombre',
+      description: data.description || '',
+      category: data.category || 'distribucion',
+      tag: data.tag || 'Disponible',
+      image: data.image || '',
+      specs: Array.isArray(data.specs) ? data.specs : [],
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      createdBy: data.createdBy
+    } as CatalogItem;
+  } catch (error) {
+    console.error("Error loading single catalog item:", error);
+    return null;
   }
 }
 

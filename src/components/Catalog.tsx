@@ -12,90 +12,6 @@ const CATEGORIES = [
   { id: 'equipos', name: 'Equipos Auxiliares' }
 ];
 
-const DEFAULT_PRODUCTS: CatalogItem[] = [
-  {
-    id: 'cat-1',
-    name: 'SUBESTACIÓN ELEVADORA UNITARIA',
-    description: 'Venta y arriendo de subestaciones elevadoras unitarias.',
-    category: 'subestaciones',
-    tag: 'IASI THE RENTAL STORE CHILE',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800&auto=format&fit=crop',
-    specs: ['Subestaciones tipo unitaria', 'Media y alta tensión', 'Certificación completa'],
-  },
-  {
-    id: 'cat-2',
-    name: 'TRANSFORMADOR PAD MOUNTED',
-    description: 'Venta y arriendo de transformadores pad mounted.',
-    category: 'distribucion',
-    tag: 'IASI THE RENTAL STORE CHILE',
-    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=800&auto=format&fit=crop',
-    specs: ['Gabinete de seguridad', 'Instalación intemperie', 'Eficiencia energética'],
-  },
-  {
-    id: 'cat-3',
-    name: 'REPARACIÓN Y REPOTENCIACIÓN',
-    description: 'Reparación y repotenciación de transformadores y ECM.',
-    category: 'equipos',
-    tag: 'IASI THE RENTAL STORE CHILE',
-    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=800&auto=format&fit=crop',
-    specs: ['Restauración de devanados', 'Aumento de capacidad', 'Pruebas dieléctricas'],
-  },
-  {
-    id: 'cat-4',
-    name: 'TRANSFORMADOR EN ACEITE',
-    description: 'Venta y arriendo de transformadores sumergidos en aceite.',
-    category: 'distribucion',
-    tag: 'IASI THE RENTAL STORE CHILE',
-    image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=800&auto=format&fit=crop',
-    specs: ['Refrigeración ONAN', 'Aislamiento mineral / vegetal', 'Alta durabilidad'],
-  },
-  {
-    id: 'cat-5',
-    name: 'TRANSFORMADOR DE PODER',
-    description: 'Venta y arriendo de transformadores de poder.',
-    category: 'poder',
-    tag: 'IASI THE RENTAL STORE CHILE',
-    image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=800&auto=format&fit=crop',
-    specs: ['Grandes potencias', 'Tratamiento al vacío', 'Montaje en terreno'],
-  },
-  {
-    id: 'cat-6',
-    name: 'MANTENCIÓN Y CERTIFICACIÓN',
-    description: 'Mantención y certificación de transformadores y ECM.',
-    category: 'equipos',
-    tag: 'IASI THE RENTAL STORE CHILE',
-    image: 'https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?q=80&w=800&auto=format&fit=crop',
-    specs: ['Protocolos SEC', 'Ensayos de rutina', 'Informes de laboratorio'],
-  },
-  {
-    id: 'cat-7',
-    name: 'TRANSFORMADOR SECO',
-    description: 'Venta y arriendo de transformadores secos.',
-    category: 'seco',
-    tag: 'IASI THE RENTAL STORE CHILE',
-    image: 'https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?q=80&w=800&auto=format&fit=crop',
-    specs: ['Resina epóxica autocombatible', 'Uso interior / comercial', 'Cero riesgo de fuga'],
-  },
-  {
-    id: 'cat-8',
-    name: 'EQUIPO COMPACTO DE MEDIDA',
-    description: 'Venta y arriendo de equipos compactos de medida.',
-    category: 'equipos',
-    tag: 'IASI THE RENTAL STORE CHILE',
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop',
-    specs: ['Medición compacta integrada', 'Media tensión SEC', 'Protección intemperie'],
-  },
-  {
-    id: 'cat-9',
-    name: 'ANÁLISIS DE ACEITE',
-    description: 'Análisis de humedad, gases y capacidad dieléctrica del aceite.',
-    category: 'equipos',
-    tag: 'IASI THE RENTAL STORE CHILE',
-    image: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=800&auto=format&fit=crop',
-    specs: ['Cromatografía de gases', 'Contenido de humedad', 'Rigidez dieléctrica'],
-  }
-];
-
 export default function Catalog() {
   const [activeCategory, setActiveCategory] = useState('todos');
   const [search, setSearch] = useState('');
@@ -112,16 +28,10 @@ export default function Catalog() {
     setError(null);
     try {
       const data = await getCatalogItems();
-      if (data && data.length > 0) {
-        const defaultNames = DEFAULT_PRODUCTS.map(p => p.name.toUpperCase());
-        const filteredDB = data.filter(p => !defaultNames.includes(p.name.toUpperCase()));
-        setProducts([...DEFAULT_PRODUCTS, ...filteredDB]);
-      } else {
-        setProducts(DEFAULT_PRODUCTS);
-      }
+      setProducts(data || []);
     } catch (err) {
-      console.error("Error loading products, using defaults:", err);
-      setProducts(DEFAULT_PRODUCTS);
+      console.error("Error loading products:", err);
+      setError("No se pudo cargar el catálogo. Por favor intente más tarde.");
     } finally {
       setLoading(false);
     }
@@ -213,7 +123,7 @@ export default function Catalog() {
                     </span>
                   </div>
                   <div className="absolute inset-0 bg-iasi-blue/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                    <a href="#contacto" className="bg-white text-iasi-blue p-3 rounded-full hover:bg-iasi-accent transition-colors shadow-xl">
+                    <a href={`?view=producto&id=${product.id}`} className="bg-white text-iasi-blue p-3 rounded-full hover:bg-iasi-accent transition-colors shadow-xl">
                       <ExternalLink size={20} />
                     </a>
                   </div>
@@ -243,7 +153,7 @@ export default function Catalog() {
                   </div>
 
                   <a 
-                    href="#contacto" 
+                    href={`?view=producto&id=${product.id}`} 
                     className="w-full border-2 border-iasi-blue text-iasi-blue py-3 rounded-sm font-black text-xs uppercase tracking-widest hover:bg-iasi-blue hover:text-white transition-all text-center"
                   >
                     MÁS INFORMACIÓN

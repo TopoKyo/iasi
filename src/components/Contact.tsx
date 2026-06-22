@@ -7,6 +7,27 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search);
+      const quoteProduct = p.get('quote');
+      if (quoteProduct) {
+        setFormState(prev => ({
+          ...prev,
+          message: `Deseo solicitar una cotización formal para el siguiente equipo de su catálogo: ${decodeURIComponent(quoteProduct)}`
+        }));
+        
+        // Wait a small moment for initial page layout to settle, then scroll to form
+        setTimeout(() => {
+          const contactSection = document.getElementById('contacto');
+          if (contactSection) {
+            contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 300);
+      }
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);

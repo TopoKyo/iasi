@@ -11,6 +11,7 @@ import Clients from './components/Clients';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import AdminPanel from './components/Admin/AdminPanel';
+import ProductPage from './components/ProductPage';
 import { motion, useScroll, useSpring } from 'motion/react';
 
 interface ErrorBoundaryProps {
@@ -52,12 +53,15 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 }
 
 export default function App() {
-  const [view, setView] = useState(() => {
+  const [route, setRoute] = useState(() => {
     if (typeof window !== 'undefined') {
       const p = new URLSearchParams(window.location.search);
-      return p.get('view') || 'site';
+      return {
+        view: p.get('view') || 'site',
+        productId: p.get('id') || ''
+      };
     }
-    return 'site';
+    return { view: 'site', productId: '' };
   });
 
   const { scrollYProgress } = useScroll();
@@ -71,8 +75,9 @@ export default function App() {
     const handleUrlChange = () => {
       const p = new URLSearchParams(window.location.search);
       const newView = p.get('view') || 'site';
-      if (newView !== view) {
-        setView(newView);
+      const newId = p.get('id') || '';
+      if (newView !== route.view || newId !== route.productId) {
+        setRoute({ view: newView, productId: newId });
         window.scrollTo(0, 0);
       }
     };
@@ -89,14 +94,27 @@ export default function App() {
       window.removeEventListener('popstate', handleUrlChange);
       clearInterval(interval);
     };
-  }, [view]);
+  }, [route]);
 
-  if (view === 'admin') {
+  if (route.view === 'admin') {
     return (
       <ErrorBoundary>
         <div className="bg-iasi-blue min-h-screen">
           <AdminPanel />
         </div>
+      </ErrorBoundary>
+    );
+  }
+
+  if (route.view === 'producto' && route.productId) {
+    return (
+      <ErrorBoundary>
+        <ProductPage 
+          productId={route.productId} 
+          onBack={() => {
+            window.location.href = '/?view=site#catalogo';
+          }} 
+        />
       </ErrorBoundary>
     );
   }
